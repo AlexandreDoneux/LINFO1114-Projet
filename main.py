@@ -5,5 +5,5 @@
 
 import numpy as np
 
-import pageRankLinear, pageRankPower, randomWalk from pagerank
+from pagerank import pageRankLinear, pageRankPower, randomWalk
 
