@@ -4,6 +4,5 @@
 # - Marcheur aléatoire
 
 import numpy as np
-
 from pagerank import pageRankLinear, pageRankPower, randomWalk
 
