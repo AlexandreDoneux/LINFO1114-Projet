@@ -17,6 +17,8 @@ v = np.loadtxt('VecteurPersonnalisation_Groupe25.csv', delimiter=',', dtype=floa
 
 # quel paramètre de téléportation choisir ?
 alpha = 0.85
+#alpha = 1
+# problème lorsque alpha = 1 pour résolution d'équation linéaire. On doit modifier la dernière équation pour imposer la somme des scores égale à 1. (e^T.x = 1)
 
 print("Calcul du PageRank par résolution d'équations linéaires : ---------------------------------------------")
 pr_linear = pageRankLinear(A, alpha, v)

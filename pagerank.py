@@ -69,8 +69,19 @@ def pageRankLinear(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
         v = np.ones((n, 1)) / n
 
     # Linear system + solve
-    M = np.eye(n) - alpha * P.T
-    b = (1 - alpha) * v
+    if alpha < 1:
+        # (I - alpha.P^T).x = (1 - alpha).v
+        M = np.eye(n) - alpha * P.T
+        b = (1 - alpha) * v
+    else:
+        # (I - P^T) x = 0 avec sum(x) = 1
+        M = np.eye(n) - P.T
+        b = np.zeros((n, 1))
+
+        # Replace last equation with sum(x) = 1
+        M[-1, :] = np.ones(n)
+        b[-1, 0] = 1.0
+
     x = np.linalg.solve(M, b)
 
     # Normalisation pour éviter les problèmes de calculs
