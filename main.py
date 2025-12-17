@@ -16,7 +16,7 @@ v = np.loadtxt('VecteurPersonnalisation_Groupe25.csv', delimiter=',', dtype=floa
 #pprint(v)
 
 # quel paramètre de téléportation choisir ?
-alpha = 0.85
+alpha = 0.9
 #alpha = 1
 # problème lorsque alpha = 1 pour résolution d'équation linéaire. On doit modifier la dernière équation pour imposer la somme des scores égale à 1. (e^T.x = 1)
 
