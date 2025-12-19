@@ -30,8 +30,8 @@ pprint(pr_power)
 
 
 print("\nCalcul du PageRank par Marcheur Aléatoire : ---------------------------------------------")
-#pr_random_walk = randomWalk(A, alpha, v)
-#pprint(pr_random_walk)
+pr_random_walk = randomWalk(A, alpha, v)
+pprint(pr_random_walk)
 
 
 
@@ -40,6 +40,6 @@ print("Différences entre PageRank Linéaire et Power Method :")
 diff_linear_power = np.abs(pr_linear - pr_power)
 pprint(diff_linear_power)
 
-#print("\nDifférences entre PageRank Linéaire et Marcheur Aléatoire (final) :")
-#diff_linear_random = np.abs(pr_linear - pr_random_walk)
-#pprint(diff_linear_random)
+print("\nDifférences entre PageRank Linéaire et Marcheur Aléatoire (final) :")
+diff_linear_random = np.abs(pr_linear - pr_random_walk)
+pprint(diff_linear_random)

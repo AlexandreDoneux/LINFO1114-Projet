@@ -2,7 +2,6 @@
 
 import numpy as np
 
-
 def prepare_data(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
     """
     Prépare les données pour le calcul du PageRank en construisant la matrice Google G.
@@ -37,7 +36,7 @@ def prepare_data(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
     e = np.ones((n, 1))
 
     G = alpha * P + (1 - alpha) * np.dot(e, v.T)  # v.T ?
-    return G
+    return G,P 
 
 # --------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +53,7 @@ def pageRankLinear(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
         np.ndarray: scores pagerank (dans le même ordre que les lignes de la matrice d’adjacence)
     """
     n = A.shape[0]
-    G = prepare_data(A, alpha, v)
+    G, P = prepare_data(A, alpha, v)
     I = np.eye(n)
 
     # (I - alpha P^T) x = (1 - alpha) v
@@ -108,11 +107,11 @@ def pageRankPower(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
     max_iter = 10000
     
     
-    G = prepare_data(A, alpha, v)
+    G, P = prepare_data(A, alpha, v)
 
-    #print("\n Matrice d'adjacence A :\n", A)
-    #print("\n Matrice de probabilite de transition P :\n", P)
-    #print("\n Matrice Google G :\n", G)
+    print("\n Matrice d'adjacence A :\n", A)
+    print("\n Matrice de probabilite de transition P :\n", P)
+    print("\n Matrice Google G :\n", G)
 
     x = np.sum(A, axis=0).reshape((n, 1)).astype(float) # ?
     
@@ -158,4 +157,40 @@ def randomWalk(A: np.ndarray, alpha: float, v: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: scores pagerank (dans le même ordre que les lignes de la matrice d’adjacence)
     """
-    pass
+    n = A.shape[0]
+    n_steps = 10001
+    burn_in = 1000
+
+    # PageRank exact
+    p_star = pageRankLinear(A, alpha, v)
+
+    # Matrices
+    G, P = prepare_data(A, alpha, v)
+
+    # Normalisation de v
+    v = v / np.sum(v)
+
+    visits = np.zeros(n)
+    errors = np.zeros(n_steps)
+
+    current = 0  # noeud A
+
+    for k in range(n_steps):
+        if np.random.rand() < alpha:
+            current = np.random.choice(n, p=P[current, :])
+        else:
+            current = np.random.choice(n, p=v)
+
+        if k >= burn_in:
+            visits[current] += 1
+            p_rw = visits / np.sum(visits)
+            errors[k] = np.mean(np.abs(p_rw - p_star))
+
+    print("\nRésultat final (random walk) :")
+    print(p_rw)
+
+    print("\nDonnées (k, ε(k)) :")
+    for k in range(burn_in, n_steps, (n_steps - burn_in) // 20):
+        print(f"{k} {errors[k]}")
+
+    return p_rw
